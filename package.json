@@ -1,0 +1,43 @@
+{
+  "name": "pothhole-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/DarkPhoenix2704/pothHole-app.git",
+  "author": "DarkPhoenix2704 <anbarasun123@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack --mode=production --node-env=production --progress",
+    "watch": "webpack --watch --progress",
+    "dev": "webpack-dev-server --progress",
+    "lint": "eslint . --ext js,jsx,ts,tsx --fix",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@react-google-maps/api": "^2.18.1",
+    "firebase": "^9.20.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.10.0",
+    "typescript": "^5.0.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^6.7.3",
+    "html-webpack-plugin": "^5.5.1",
+    "mini-css-extract-plugin": "^2.7.5",
+    "postcss": "^8.4.23",
+    "postcss-loader": "^7.2.4",
+    "postcss-preset-env": "^8.3.2",
+    "responsive-loader": "^3.1.2",
+    "sharp": "^0.32.0",
+    "source-map-loader": "^4.0.1",
+    "style-loader": "^3.3.2",
+    "tailwindcss": "^3.3.2",
+    "ts-loader": "^9.4.2",
+    "webpack": "^5.80.0",
+    "webpack-cli": "^5.0.2",
+    "webpack-dev-server": "^4.13.3"
+  }
+}
