@@ -79,12 +79,13 @@ export const Home = () => {
       <div className="min-h-screen bg-gray-100 flex justify-center items-center">
         <table className="bg-white w-5/6 p-4 rounded-lg">
           <tr>
-            <th colSpan={4} className="px-4 py-2">
+            <th colSpan={5} className="px-4 py-2">
               Poth Hole Locations
             </th>
           </tr>
           <tr>
             <th className="px-2 py-2">SI NO</th>
+            <th className="px-2 py-2">Date</th>
             <th className="px-2 py-2">Latitude</th>
             <th className="px-2 py-2">Logitude</th>
             <th className="px-2 py-2">Action</th>
@@ -93,8 +94,13 @@ export const Home = () => {
             locations.map((location, index) => {
               return (
                 <tr key={index}>
+                  <td className="px-2 py-2">{index + 1}</td>
                   <td className="px-2 py-2">
-                    <div className="bg-red-400 w-4 h-4 rounded-full mr-2"></div>
+                    {new Date().getDate() +
+                      "/" +
+                      new Date().getMonth() +
+                      "/" +
+                      new Date().getFullYear()}
                   </td>
                   <td className="px-2 py-2">
                     <div className="text-gray-500 w-full flex-grow">
