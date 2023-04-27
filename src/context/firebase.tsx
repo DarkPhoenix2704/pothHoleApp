@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 import { getFunctions } from "firebase/functions";
+import { getStorage } from "firebase/storage";
 import React, { createContext, useContext } from "react";
 
 const FirebaseContext = createContext<any>({});
@@ -21,6 +22,8 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app);
 const functions = getFunctions(app);
+const storage = getStorage(app);
+
 export const useFirebase = () => useContext(FirebaseContext);
 export const FirebaseProvider = ({
   children,
@@ -28,7 +31,7 @@ export const FirebaseProvider = ({
   children: React.ReactNode;
 }) => (
   // eslint-disable-next-line react/jsx-no-constructed-context-values
-  <FirebaseContext.Provider value={{ auth, db, functions }}>
+  <FirebaseContext.Provider value={{ auth, db, functions, storage }}>
     {children}
   </FirebaseContext.Provider>
 );

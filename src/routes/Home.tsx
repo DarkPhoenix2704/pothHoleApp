@@ -77,47 +77,58 @@ export const Home = () => {
         </div>
       </div>
       <div className="min-h-screen bg-gray-100 flex justify-center items-center">
-        <div className="bg-white w-1/2 p-4 rounded-lg">
-          <h1 className="text-2xl font-bold">Poth Hole Locations</h1>
-          <div className="mt-4">
-            {locations &&
-              locations.map((location, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center"
-                  >
-                    <div className="flex items-center">
-                      <div className="bg-red-400 w-4 h-4 rounded-full mr-2"></div>
-                      <div className="text-gray-500 w-full flex-grow">
-                        {location.latitude}, {location.longitude}
-                      </div>
-                      <button
-                        className="text-gray-500 ml-2 p-2 cursor-pointer"
-                        onClick={() => {
-                          const locationRef = ref(
-                            db,
-                            `locations/${location.id}`
-                          );
-                          set(locationRef, null);
-                          setLocations((prev) => {
-                            if (prev) {
-                              return prev.filter(
-                                (item) => item.id !== location.id
-                              );
-                            }
-                            return prev;
-                          });
-                        }}
-                      >
-                        Remove
-                      </button>
+        <table className="bg-white w-5/6 p-4 rounded-lg">
+          <tr>
+            <th colSpan={4} className="px-4 py-2">
+              Poth Hole Locations
+            </th>
+          </tr>
+          <tr>
+            <th className="px-2 py-2">SI NO</th>
+            <th className="px-2 py-2">Latitude</th>
+            <th className="px-2 py-2">Logitude</th>
+            <th className="px-2 py-2">Action</th>
+          </tr>
+          {locations &&
+            locations.map((location, index) => {
+              return (
+                <tr key={index}>
+                  <td className="px-2 py-2">
+                    <div className="bg-red-400 w-4 h-4 rounded-full mr-2"></div>
+                  </td>
+                  <td className="px-2 py-2">
+                    <div className="text-gray-500 w-full flex-grow">
+                      {location.latitude}
                     </div>
-                  </div>
-                );
-              })}
-          </div>
-        </div>
+                  </td>
+                  <td className="px-2 py-2">
+                    <div className="text-gray-500 w-full flex-grow">
+                      {location.longitude}
+                    </div>
+                  </td>
+                  <td className="px-2 py-2 ">
+                    <button
+                      className="text-white rounded-md bg-red-500 p-2 cursor-pointer"
+                      onClick={() => {
+                        const locationRef = ref(db, `locations/${location.id}`);
+                        set(locationRef, null);
+                        setLocations((prev) => {
+                          if (prev) {
+                            return prev.filter(
+                              (item) => item.id !== location.id
+                            );
+                          }
+                          return prev;
+                        });
+                      }}
+                    >
+                      Remove
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+        </table>
       </div>
     </>
   );

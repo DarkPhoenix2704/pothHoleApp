@@ -4,13 +4,16 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFirebase } from "../context/firebase";
 import { ref, push, set } from "firebase/database";
+import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 export const AddPothHole = () => {
-  const { auth, db } = useFirebase();
+  const { auth, db, storage } = useFirebase();
   const navigate = useNavigate();
   const [latitude, setLatitude] = React.useState<number | null>(null);
   const [longitude, setLongitude] = React.useState<number | null>(null);
+  const [file, setFile] = React.useState<File | null>(null);
   const [isSuccess, setIsSuccess] = React.useState<boolean>(false);
+  const [percent, setPercent] = React.useState(0);
 
   const addPothHole = async (e: React.FormEvent<HTMLFormElement>) => {
     setIsSuccess(false);
@@ -25,6 +28,35 @@ export const AddPothHole = () => {
       setIsSuccess(true);
     });
   };
+
+  function handleFile(event: React.ChangeEvent<HTMLInputElement>) {
+    setFile(event.target.files![0]);
+  }
+
+  /*  const handleUpload = () => {
+    if (!file) {
+      alert("Please select a file");
+      return;
+    }
+    const storageRef = ref(storage, `/files/${file.name}`); // progress can be paused and resumed. It also exposes progress updates. // Receives the storage reference and the file to upload.
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const percent = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        ); // update progress
+        setPercent(percent);
+      },
+      (err) => console.log(err),
+      () => {
+        // download url
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          console.log(url);
+        });
+      }
+    );
+  }; */
 
   return (
     <>
@@ -94,6 +126,45 @@ export const AddPothHole = () => {
                 className="border rounded py-2 px-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
+            <div className="flex mb-2 items-center justify-center w-full">
+              <label
+                htmlFor="dropzone-file"
+                className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white-100"
+              >
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <svg
+                    aria-hidden="true"
+                    className="w-10 h-10 mb-3 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                    ></path>
+                  </svg>
+                  <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                    <span className="font-semibold">Click to upload</span> or
+                    drag and drop
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    SVG, PNG, JPG or GIF (MAX. 800x400px)
+                  </p>
+                </div>
+                <input
+                  id="dropzone-file"
+                  type="file"
+                  className="hidden"
+                  /*                   onChange={handleFile}
+                   */
+                />
+              </label>
+            </div>
+            <p>{percent} "% done"</p>
             <button
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
