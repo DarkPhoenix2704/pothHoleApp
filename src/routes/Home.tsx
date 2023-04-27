@@ -60,6 +60,12 @@ export const Home = () => {
         >
           Poth Hole Map
         </Link>
+        <Link
+          to="/addpothhole"
+          className="text-gray-500 ml-2 p-2 cursor-pointer"
+        >
+          Add PothHole
+        </Link>
         <div
           onClick={() => {
             signOut(auth);

@@ -4,6 +4,7 @@ import { useFirebase } from "./context/firebase";
 import { Login } from "./routes/Login";
 import { Home } from "./routes/Home";
 import { PothHoleMap } from "./routes/PothHoleMap";
+import { AddPothHole } from "./routes/AddPothHole";
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/pothholemap" element={<PothHoleMap />} />
+        <Route path="/addpothhole" element={<AddPothHole />} />
       </Routes>
     </BrowserRouter>
   );
