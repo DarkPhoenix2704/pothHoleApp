@@ -1,10 +1,9 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useFirebase } from "./context/firebase";
 import { Login } from "./routes/Login";
 import { Home } from "./routes/Home";
-import { PothHoleMap } from "./routes/PothHoleMap";
-import { AddPothHole } from "./routes/AddPothHole";
+import { PotHoleMap } from "./routes/PotHoleMap";
+import { AddPotHole } from "./routes/AddPotHole";
 
 const App = () => {
   return (
@@ -12,8 +11,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/pothholemap" element={<PothHoleMap />} />
-        <Route path="/addpothhole" element={<AddPothHole />} />
+        <Route path="/potholemap" element={<PotHoleMap />} />
+        <Route path="/addpothole" element={<AddPotHole />} />
       </Routes>
     </BrowserRouter>
   );

@@ -5,7 +5,7 @@ import { signOut } from "firebase/auth";
 import { ref, get, query } from "firebase/database";
 import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
 
-export const PothHoleMap = () => {
+export const PotHoleMap = () => {
   const { auth, db } = useFirebase();
   const navigate = useNavigate();
   const [locations, setLocations] = React.useState<Array<{
@@ -20,8 +20,8 @@ export const PothHoleMap = () => {
   };
 
   const center = {
-    lat: -3.745,
-    lng: -38.523,
+    lat: 9.9894,
+    lng: 76.579,
   };
   useEffect(() => {
     (async () => {
@@ -58,16 +58,16 @@ export const PothHoleMap = () => {
           Home
         </Link>
         <Link
-          to="/pothholemap"
+          to="/potholemap"
           className="text-gray-500 ml-2 p-2 cursor-pointer"
         >
-          Poth Hole Map
+          Pot Hole Map
         </Link>
         <Link
-          to="/addpothhole"
+          to="/addpothole"
           className="text-gray-500 ml-2 p-2 cursor-pointer"
         >
-          Add Poth Hole
+          Add Pot Hole
         </Link>
         <div
           onClick={() => {
@@ -81,12 +81,12 @@ export const PothHoleMap = () => {
       </div>
       <div className="min-h-screen bg-gray-100 flex justify-center items-center">
         <div className="bg-white w-1/2 p-4 rounded-lg">
-          <h1 className="text-2xl font-bold">Poth Hole Map</h1>
+          <h1 className="text-2xl font-bold">Pot Hole Map</h1>
           <LoadScript googleMapsApiKey="AIzaSyDZNQ4fIy6JJWDjC8D47kA6B428usEAuMg">
             <GoogleMap
               mapContainerStyle={containerStyle}
               center={center}
-              zoom={1}
+              zoom={12}
             >
               {locations?.map((location) => (
                 <Marker

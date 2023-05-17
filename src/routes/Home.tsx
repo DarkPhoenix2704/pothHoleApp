@@ -1,16 +1,18 @@
-import { ref, push, set, query, get, onValue } from "firebase/database";
+import { ref, set, query, get } from "firebase/database";
+import { getDownloadURL, ref as stref } from "firebase/storage";
 import React, { useEffect } from "react";
 import { useFirebase } from "../context/firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { User, signOut } from "firebase/auth";
 
 export const Home = () => {
-  const { db, auth } = useFirebase();
+  const { db, auth, storage } = useFirebase();
   const navigate = useNavigate();
   const [locations, setLocations] = React.useState<Array<{
     id: string;
     latitude: number;
     longitude: number;
+    url: string;
   }> | null>(null);
 
   useEffect(() => {
@@ -20,24 +22,21 @@ export const Home = () => {
       const data: Array<{
         id: string;
         latitude: number;
+        url: string;
         longitude: number;
       }> = [];
-      Object.entries(locationsSnapShot.val()).forEach((val: any) => {
+
+      Object.entries(locationsSnapShot.val()).map((val: any) => {
         const id = val[0];
         data.push({
           id: id,
           latitude: val[1].latitude,
           longitude: val[1].longitude,
+          url: val[1].url,
         });
       });
 
-      setLocations(
-        data as {
-          id: string;
-          latitude: number;
-          longitude: number;
-        }[]
-      );
+      setLocations(data);
     })();
   }, []);
 
@@ -55,16 +54,16 @@ export const Home = () => {
           Home
         </Link>
         <Link
-          to="/pothholemap"
+          to="/potholemap"
           className="text-gray-500 ml-2 p-2 cursor-pointer"
         >
-          Poth Hole Map
+          Pot Hole Map
         </Link>
         <Link
-          to="/addpothhole"
+          to="/addpothole"
           className="text-gray-500 ml-2 p-2 cursor-pointer"
         >
-          Add PothHole
+          Add PotHole
         </Link>
         <div
           onClick={() => {
@@ -77,64 +76,69 @@ export const Home = () => {
         </div>
       </div>
       <div className="min-h-screen bg-gray-100 flex justify-center items-center">
-        <table className="bg-white w-5/6 p-4 rounded-lg">
-          <tr>
-            <th colSpan={5} className="px-4 py-2">
-              Poth Hole Locations
-            </th>
-          </tr>
-          <tr>
-            <th className="px-2 py-2">SI NO</th>
-            <th className="px-2 py-2">Date</th>
-            <th className="px-2 py-2">Latitude</th>
-            <th className="px-2 py-2">Logitude</th>
-            <th className="px-2 py-2">Action</th>
-          </tr>
-          {locations &&
-            locations.map((location, index) => {
-              return (
-                <tr key={index}>
-                  <td className="px-2 py-2">{index + 1}</td>
-                  <td className="px-2 py-2">
-                    {new Date().getDate() +
-                      "/" +
-                      new Date().getMonth() +
-                      "/" +
-                      new Date().getFullYear()}
-                  </td>
-                  <td className="px-2 py-2">
-                    <div className="text-gray-500 w-full flex-grow">
-                      {location.latitude}
-                    </div>
-                  </td>
-                  <td className="px-2 py-2">
-                    <div className="text-gray-500 w-full flex-grow">
-                      {location.longitude}
-                    </div>
-                  </td>
-                  <td className="px-2 py-2 ">
-                    <button
-                      className="text-white rounded-md bg-red-500 p-2 cursor-pointer"
-                      onClick={() => {
-                        const locationRef = ref(db, `locations/${location.id}`);
-                        set(locationRef, null);
-                        setLocations((prev) => {
-                          if (prev) {
-                            return prev.filter(
-                              (item) => item.id !== location.id
+        <div className="bg-white  w-3/4 p-4 rounded-lg">
+          <table className="table-auto w-full">
+            <thead>
+              <tr>
+                <td colSpan={5} className="text-center font-bold px-4 py-2">
+                  PotHole Locations
+                </td>
+              </tr>
+              <tr>
+                <th className="px-4 py-2">SI/No</th>
+                <th className="px-4 py-2">Latitude</th>
+                <th className="px-4 py-2">Longitude</th>
+                <th className="px-4 py-2">Image</th>
+                <th className="px-4 py-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {locations &&
+                locations.map((location, key) => {
+                  return (
+                    <tr key={location?.id}>
+                      <td className="border px-4 py-2">{key + 1}</td>
+                      <td className="border px-4 py-2">{location?.latitude}</td>
+                      <td className="border px-4 py-2">
+                        {location?.longitude}
+                      </td>
+                      <td className="border px-4 py-2">
+                        <a href={location.url} target="_blank">
+                          <img
+                            src={location.url}
+                            alt="pothole"
+                            className="w-20 h-20 hover:scale-150 transition-transform object-cover"
+                          />
+                        </a>
+                      </td>
+                      <td className="border text-center px-4 py-2">
+                        <button
+                          className="text-white rounded-md ml-2 p-2 bg-red-400 cursor-pointer"
+                          onClick={() => {
+                            const locationRef = ref(
+                              db,
+                              `locations/${location?.id}`
                             );
-                          }
-                          return prev;
-                        });
-                      }}
-                    >
-                      Remove
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-        </table>
+                            set(locationRef, null);
+                            setLocations((prev) => {
+                              if (prev) {
+                                return prev.filter(
+                                  (item) => item?.id !== location?.id
+                                );
+                              }
+                              return prev;
+                            });
+                          }}
+                        >
+                          Remove
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );

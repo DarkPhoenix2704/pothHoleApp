@@ -1,62 +1,61 @@
-import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
 import { signOut } from "firebase/auth";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFirebase } from "../context/firebase";
-import { ref, push, set } from "firebase/database";
-import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { ref, set } from "firebase/database";
+import { getDownloadURL, ref as stref, uploadBytes } from "firebase/storage";
 
-export const AddPothHole = () => {
+export const AddPotHole = () => {
   const { auth, db, storage } = useFirebase();
   const navigate = useNavigate();
   const [latitude, setLatitude] = React.useState<number | null>(null);
   const [longitude, setLongitude] = React.useState<number | null>(null);
-  const [file, setFile] = React.useState<File | null>(null);
   const [isSuccess, setIsSuccess] = React.useState<boolean>(false);
-  const [percent, setPercent] = React.useState(0);
+  const [potHoleDoesNotExist, setPotHoleDoesNotExist] = React.useState<
+    boolean | null
+  >(null);
+  const [image, setImage] = React.useState<File | null>(null);
 
-  const addPothHole = async (e: React.FormEvent<HTMLFormElement>) => {
+  const checkIfPotHoleExists = async () => {
+    const formData = new FormData();
+    formData.append("file", image as File);
+    const res = await (
+      await fetch("https://pothole.anbarasun.in", {
+        method: "POST",
+        body: formData,
+      })
+    ).json();
+    return res.prediction;
+  };
+
+  const addPotHole = async (e: React.FormEvent<HTMLFormElement>) => {
     setIsSuccess(false);
     e.preventDefault();
+    setPotHoleDoesNotExist(null);
+    const data = await checkIfPotHoleExists();
+    if (!data) {
+      setPotHoleDoesNotExist(true);
+      return;
+    }
     const id = Date.now();
-    const locationRef = ref(db, `locations/${id}`);
-    await set(locationRef, {
-      latitude: latitude,
-      longitude: longitude,
-      id,
-    }).then((snapShot) => {
-      setIsSuccess(true);
+    const storageRef = await stref(storage, `images/${id}`);
+    await uploadBytes(storageRef, image as Blob).then(async (snapShot) => {
+      const url = await getDownloadURL(await snapShot.ref);
+      const locationRef = ref(db, `locations/${id}`);
+      await set(locationRef, {
+        latitude: latitude,
+        longitude: longitude,
+        id,
+        url,
+      }).then(async (snapShot) => {
+        setIsSuccess(true);
+      });
     });
   };
 
   function handleFile(event: React.ChangeEvent<HTMLInputElement>) {
-    setFile(event.target.files![0]);
+    setImage(event.target.files![0]);
   }
-
-  /*  const handleUpload = () => {
-    if (!file) {
-      alert("Please select a file");
-      return;
-    }
-    const storageRef = ref(storage, `/files/${file.name}`); // progress can be paused and resumed. It also exposes progress updates. // Receives the storage reference and the file to upload.
-    const uploadTask = uploadBytesResumable(storageRef, file);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const percent = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        ); // update progress
-        setPercent(percent);
-      },
-      (err) => console.log(err),
-      () => {
-        // download url
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          console.log(url);
-        });
-      }
-    );
-  }; */
 
   return (
     <>
@@ -65,16 +64,16 @@ export const AddPothHole = () => {
           Home
         </Link>
         <Link
-          to="/pothholemap"
+          to="/potholemap"
           className="text-gray-500 ml-2 p-2 cursor-pointer"
         >
-          Poth Hole Map
+          Pot Hole Map
         </Link>
         <Link
-          to="/addpothhole"
+          to="/addpothole"
           className="text-gray-500 ml-2 p-2 cursor-pointer"
         >
-          Add Poth Hole
+          Add Pot Hole
         </Link>
         <div
           onClick={() => {
@@ -88,8 +87,8 @@ export const AddPothHole = () => {
       </div>
       <div className="min-h-screen bg-gray-100 flex justify-center items-center">
         <div className="bg-white w-1/2 p-4 rounded-lg">
-          <h1 className="text-2xl font-bold">Add Poth Hole</h1>
-          <form className="flex flex-col" onSubmit={addPothHole}>
+          <h1 className="text-2xl font-bold">Add Pot Hole</h1>
+          <form className="flex flex-col" onSubmit={addPotHole}>
             <div className="mb-4">
               <label
                 htmlFor="number"
@@ -159,20 +158,24 @@ export const AddPothHole = () => {
                   id="dropzone-file"
                   type="file"
                   className="hidden"
-                  /*                   onChange={handleFile}
-                   */
+                  accept="image/*"
+                  onChange={handleFile}
                 />
               </label>
             </div>
-            <p>{percent} "% done"</p>
             <button
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
             >
-              Add Poth Hole
+              Add Pot Hole
             </button>
+            {potHoleDoesNotExist ? (
+              <div className="text-white my-2 rounded-sm p-2 bg-red-400">
+                Pot Hole Does Not Exist
+              </div>
+            ) : null}
             {isSuccess && (
-              <div className="text-green-500">Poth Hole Added Successfully</div>
+              <div className="text-green-500">Pot Hole Added Successfully</div>
             )}
           </form>
         </div>
