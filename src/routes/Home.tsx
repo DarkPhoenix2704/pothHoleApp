@@ -57,7 +57,7 @@ export const Home = () => {
           to="/potholemap"
           className="text-gray-500 ml-2 p-2 cursor-pointer"
         >
-          Pot Hole Map
+          Pothole Map
         </Link>
         <Link
           to="/addpothole"
@@ -81,7 +81,7 @@ export const Home = () => {
             <thead>
               <tr>
                 <td colSpan={5} className="text-center font-bold px-4 py-2">
-                  PotHole Locations
+                  Pothole Locations
                 </td>
               </tr>
               <tr>

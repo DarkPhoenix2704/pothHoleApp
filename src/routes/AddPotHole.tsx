@@ -67,13 +67,13 @@ export const AddPotHole = () => {
           to="/potholemap"
           className="text-gray-500 ml-2 p-2 cursor-pointer"
         >
-          Pot Hole Map
+          Pothole Map
         </Link>
         <Link
           to="/addpothole"
           className="text-gray-500 ml-2 p-2 cursor-pointer"
         >
-          Add Pot Hole
+          Add Pothole
         </Link>
         <div
           onClick={() => {
@@ -87,7 +87,7 @@ export const AddPotHole = () => {
       </div>
       <div className="min-h-screen bg-gray-100 flex justify-center items-center">
         <div className="bg-white w-1/2 p-4 rounded-lg">
-          <h1 className="text-2xl font-bold">Add Pot Hole</h1>
+          <h1 className="text-2xl font-bold">Add Pothole</h1>
           <form className="flex flex-col" onSubmit={addPotHole}>
             <div className="mb-4">
               <label
@@ -136,15 +136,15 @@ export const AddPotHole = () => {
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
             >
-              Add Pot Hole
+              Add Pothole
             </button>
             {potHoleDoesNotExist ? (
               <div className="text-white my-2 rounded-sm p-2 bg-red-400">
-                Pot Hole Does Not Exist
+                Pothole Does Not Exist
               </div>
             ) : null}
             {isSuccess && (
-              <div className="text-green-500">Pot Hole Added Successfully</div>
+              <div className="text-green-500">Pothole Added Successfully</div>
             )}
           </form>
         </div>

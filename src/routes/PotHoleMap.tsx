@@ -61,13 +61,13 @@ export const PotHoleMap = () => {
           to="/potholemap"
           className="text-gray-500 ml-2 p-2 cursor-pointer"
         >
-          Pot Hole Map
+          Pothole Map
         </Link>
         <Link
           to="/addpothole"
           className="text-gray-500 ml-2 p-2 cursor-pointer"
         >
-          Add Pot Hole
+          Add Pothole
         </Link>
         <div
           onClick={() => {
@@ -81,7 +81,7 @@ export const PotHoleMap = () => {
       </div>
       <div className="min-h-screen bg-gray-100 flex justify-center items-center">
         <div className="bg-white w-1/2 p-4 rounded-lg">
-          <h1 className="text-2xl font-bold">Pot Hole Map</h1>
+          <h1 className="text-2xl font-bold">Pothole Map</h1>
           <LoadScript googleMapsApiKey="AIzaSyDZNQ4fIy6JJWDjC8D47kA6B428usEAuMg">
             <GoogleMap
               mapContainerStyle={containerStyle}
