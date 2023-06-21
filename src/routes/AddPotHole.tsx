@@ -20,7 +20,7 @@ export const AddPotHole = () => {
     const formData = new FormData();
     formData.append("file", image as File);
     const res = await (
-      await fetch("https://pothole.anbarasun.in", {
+      await fetch("http://localhost:5000", {
         method: "POST",
         body: formData,
       })
