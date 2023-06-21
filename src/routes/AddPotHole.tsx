@@ -20,7 +20,7 @@ export const AddPotHole = () => {
     const formData = new FormData();
     formData.append("file", image as File);
     const res = await (
-      await fetch("http://localhost:5000", {
+      await fetch("http://20.193.151.131", {
         method: "POST",
         body: formData,
       })
